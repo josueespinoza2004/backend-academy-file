@@ -1,7 +1,12 @@
-import { Column, Entity } from 'typeorm';
-import { PrimaryGeneratedColumn } from 'typeorm/browser';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
-@Entity('files.file')
+@Entity({ schema: 'files', name: 'file' })
 export class File {
   @PrimaryGeneratedColumn('increment')
   id: number;
@@ -9,16 +14,10 @@ export class File {
   @Column({ type: 'int4', nullable: false })
   model_id: number;
 
-  @Column({ type: 'int8', nullable: false })
-  user_id: number;
-
-  @Column({ type: 'int8', nullable: false })
-  user_updated_id: number;
-
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updated_at: Date;
 
   @Column({ type: 'varchar', nullable: false, length: 255 })
