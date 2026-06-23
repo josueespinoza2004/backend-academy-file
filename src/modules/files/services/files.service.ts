@@ -25,7 +25,9 @@ export class FilesService {
     fileName: string;
     modelId: number;
   }): Promise<File> {
-    const uniqueName = `${data.modelId}-${Date.now()}-${data.fileName}`;
+    const ext = path.extname(data.fileName);
+    const date = new Date().toISOString().split('T')[0];
+    const uniqueName = `${data.modelId}-${date}${ext}`;
     const filePath = path.join(this.uploadPath, uniqueName);
 
     const buffer = Buffer.from(data.buffer);
