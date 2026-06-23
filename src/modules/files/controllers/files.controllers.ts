@@ -1,4 +1,4 @@
-import { Controller, ParseIntPipe } from '@nestjs/common';
+import { Controller, NotFoundException, ParseIntPipe } from '@nestjs/common';
 import { FilesService } from '../services/files.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 
@@ -28,7 +28,18 @@ export class FilesController {
 
   @MessagePattern({ cmd: 'get_file' })
   async getOne(@Payload(ParseIntPipe) id: number) {
-    return await this.filesService.getOne(id);
+    try {
+      return await this.filesService.getOne(id);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        return { error: true, statusCode: 404, message: error.message };
+      }
+      return {
+        error: true,
+        statusCode: 500,
+        message: 'Error interno al obtener archivo',
+      };
+    }
   }
 
   @MessagePattern({ cmd: 'get_file_by_model' })
